@@ -3,6 +3,7 @@ const canvas = document.createElement("canvas");
 document.body.appendChild(canvas);
 canvas.width = 600;
 canvas.height = 600;
+w = canvas.width;
 const canvas_ctx = canvas.getContext("2d");
 let canvas_buffer = canvas_ctx.getImageData(0, 0, canvas.width, canvas.height);
 let data = canvas_buffer.data;
@@ -44,4 +45,10 @@ let dirY = 0;
 // you get the other one
 let planeX = 0;
 let planeY = 0.66; 
+// Loop through the canvas
+for (let x = 0; x < w; x++) {
+    let cameraX = ((2 * x ) / w ) - 1;
+    let rayDirX = posX + dirX + planeX;
+    let rayDirY = posY + dirY + planeY;
+}
   
