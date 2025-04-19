@@ -47,8 +47,25 @@ let planeX = 0;
 let planeY = 0.66; 
 // Loop through the canvas
 for (let x = 0; x < w; x++) {
+    // Transform x from canvas width to cameraX value in [-1;1]
     let cameraX = ((2 * x ) / w ) - 1;
     let rayDirX = posX + dirX + planeX;
     let rayDirY = posY + dirY + planeY;
+    // Position in the map
+    let mapX = Math.floor(posX);
+    let mapY = Math.floor(posY);
+    // Variables to hold the values of the distance from the current position to the first next x or y side
+    let sideDistX;
+    let sideDistY;
+    // The distance the ray has to travel from the current x side to the next x side  (same thing with y side)
+    let deltaDistX = (rayDirX === 0) ? 1e30 : Math.abs(1 / rayDirX);
+    let deltaDistY = (rayDirY === 0) ? 1e30 : Math.abs(1 / rayDirY);
+    // Variable necessary to calculate length of the ray
+    let perpWallDist;
+    // What direction to go next step (-1 or 1)
+    let stepX;
+    let stepY;
+    let hit; // Value to determine if the coming loop will be ended
+    let side; // Value to determine if we hit a side x or a y side of a wall.
 }
   
