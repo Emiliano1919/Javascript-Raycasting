@@ -49,8 +49,8 @@ let planeY = 0.66;
 for (let x = 0; x < w; x++) {
     // Transform x from canvas width to cameraX value in [-1;1]
     let cameraX = ((2 * x ) / w ) - 1;
-    let rayDirX = posX + dirX + planeX;
-    let rayDirY = posY + dirY + planeY;
+    let rayDirX = dirX + planeX * cameraX;
+    let rayDirY = dirY + planeY * cameraX;
     // Position in the map
     let mapX = Math.floor(posX);
     let mapY = Math.floor(posY);
