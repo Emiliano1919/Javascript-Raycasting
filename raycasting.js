@@ -46,6 +46,7 @@ let dirY = 0;
 // you get the other one
 let planeX = 0;
 let planeY = 0.66; 
+
 function raycaster() {
     // Loop through the canvas
     for (let x = 0; x < w; x++) {
@@ -155,8 +156,68 @@ function raycaster() {
             color = color.map(c => c / 2);
         }
         verticalLine(x, drawStart, drawEnd, color);
-        canvas_ctx.putImageData(canvas_buffer, 0, 0);
+    }
+    canvas_ctx.putImageData(canvas_buffer, 0, 0); //Outside the loop for performance reasons
+}
+
+let keys ={}
+document.addEventListener('keydown', (event) =>{
+    keys[event.code] = true;
+})
+document.addEventListener('keyup', (event) =>{
+    keys[event.code] = false;
+})
+
+function updatePlayer() {
+    const moveSpeed = 0.05;
+    const rotSpeed = 0.03;
+
+    // move forward if no wall in front of you
+    if (keys['KeyW']) {
+        if (worldMap[Math.floor(posX + dirX * moveSpeed)][Math.floor(posY)] === 0) {
+            posX += dirX * moveSpeed;
+        }
+        if (worldMap[Math.floor(posX)][Math.floor(posY + dirY * moveSpeed)] === 0) {
+            posY += dirY * moveSpeed;
+        }
+    }
+
+    // move backward if no wall behind you
+    if (keys['KeyS']) {
+        if (worldMap[Math.floor(posX - dirX * moveSpeed)][Math.floor(posY)] === 0) {
+            posX -= dirX * moveSpeed;
+        }
+        if (worldMap[Math.floor(posX)][Math.floor(posY - dirY * moveSpeed)] === 0) {
+            posY -= dirY * moveSpeed;
+        }
+    }
+
+    // rotate to the right
+    if (keys['KeyD']) {
+        const oldDirX = dirX;
+        dirX = dirX * Math.cos(-rotSpeed) - dirY * Math.sin(-rotSpeed);
+        dirY = oldDirX * Math.sin(-rotSpeed) + dirY * Math.cos(-rotSpeed);
+        const oldPlaneX = planeX;
+        planeX = planeX * Math.cos(-rotSpeed) - planeY * Math.sin(-rotSpeed);
+        planeY = oldPlaneX * Math.sin(-rotSpeed) + planeY * Math.cos(-rotSpeed);
+    }
+
+    // rotate to the left
+    if (keys['KeyA']) {
+        const oldDirX = dirX;
+        dirX = dirX * Math.cos(rotSpeed) - dirY * Math.sin(rotSpeed);
+        dirY = oldDirX * Math.sin(rotSpeed) + dirY * Math.cos(rotSpeed);
+        const oldPlaneX = planeX;
+        planeX = planeX * Math.cos(rotSpeed) - planeY * Math.sin(rotSpeed);
+        planeY = oldPlaneX * Math.sin(rotSpeed) + planeY * Math.cos(rotSpeed);
     }
 }
-raycaster();
+
+function gameLoop() {
+    updatePlayer();
+    raycaster();
+    requestAnimationFrame(gameLoop);
+}
+raycaster(); // Starter
+gameLoop();
   
