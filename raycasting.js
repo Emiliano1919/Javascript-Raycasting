@@ -97,6 +97,11 @@ for (let x = 0; x < w; x++) {
             hit = 1;
         }
     }
-    
+    // Calculate distance from the camera plane to the wall
+    if (side == 0) {
+        perpWallDist = (sideDistX - deltaDistX);
+    } else {
+        perpWallDist = (sideDistY - deltaDistY);
+    }
 }
   
