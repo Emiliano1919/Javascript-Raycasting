@@ -1,6 +1,7 @@
 # Javascript-Raycasting
 Raycasting in javascript, like the one in Wolfenstein 3D.
-You can move and look around using WASD.
+Available [here](https://emiliano1919.github.io/Javascript-Raycasting/).
+**You can move and look around using WASD.**
 
 Latest image:
 ![Latest starting image from the ray caster](./raycaster.png)
