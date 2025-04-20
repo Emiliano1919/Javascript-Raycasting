@@ -67,5 +67,20 @@ for (let x = 0; x < w; x++) {
     let stepY;
     let hit; // Value to determine if the coming loop will be ended
     let side; // Value to determine if we hit a side x or a y side of a wall.
+    // Calculate to which side we should step and the inidial sideDistX
+    if (rayDirX < 0) {
+        stepX = -1;
+        sideDistX = (posX - mapX) * deltaDistX;
+    } else {
+        stepX = 1;
+        sideDistX = (mapX + 1.0 - posX) * deltaDistX;
+    }
+    if (rayDirY < 0) {
+        stepY = -1;
+        sideDistY = (posY - mapY) * deltaDistY;
+    } else {
+        stepY = 1;
+        sideDistY = (mapY + 1.0 - posY) * deltaDistY;
+    }
 }
   
