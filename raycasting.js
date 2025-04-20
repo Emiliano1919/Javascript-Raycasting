@@ -47,6 +47,32 @@ let dirY = 0;
 let planeX = 0;
 let planeY = 0.66; 
 
+const RGB_Red = [255, 0, 0];
+const RGB_Green = [0, 255, 0];
+const RGB_Blue = [0, 0, 255];
+const RGB_White = [255,255, 255];
+const RGB_Yellow = [255, 255, 0];
+const RGB_Black = [0,0,0];
+function verticalLine(x, drawStart, drawEnd, color) {
+    drawStart = Math.floor(drawStart);
+    drawEnd = Math.floor(drawEnd);
+
+    for (let y = 0; y < h; y++) {
+        const index = (y * canvas.width + x) * 4;
+        if (y >= drawStart && y <= drawEnd) {
+            data[index + 0] = color[0]; // Red
+            data[index + 1] = color[1]; // Green
+            data[index + 2] = color[2]; // Blue
+            data[index + 3] = 255;      // Alpha
+        } else {
+            data[index + 0] = RGB_Black[0]; // Red
+            data[index + 1] = RGB_Black[1]; // Green
+            data[index + 2] = RGB_Black[2]; // Blue
+            data[index + 3] = 255;      // Alpha
+        }
+    }
+}
+
 function raycaster() {
     // Loop through the canvas
     for (let x = 0; x < w; x++) {
@@ -117,32 +143,6 @@ function raycaster() {
         if (drawEnd >= h) {
             drawEnd = h-1;
         }
-        const RGB_Red = [255, 0, 0];
-        const RGB_Green = [0, 255, 0];
-        const RGB_Blue = [0, 0, 255];
-        const RGB_White = [255,255, 255];
-        const RGB_Yellow = [255, 255, 0];
-        const RGB_Black = [0,0,0];
-        function verticalLine(x, drawStart, drawEnd, color) {
-            drawStart = Math.floor(drawStart);
-            drawEnd = Math.floor(drawEnd);
-        
-            for (let y = 0; y < h; y++) {
-                const index = (y * canvas.width + x) * 4;
-                if (y >= drawStart && y <= drawEnd) {
-                    color = color.map(c => c -perpWallDist/5 ); // If it is very far change the color to something darker
-                    data[index + 0] = color[0]; // Red
-                    data[index + 1] = color[1]; // Green
-                    data[index + 2] = color[2]; // Blue
-                    data[index + 3] = 255;      // Alpha
-                } else {
-                    data[index + 0] = RGB_Black[0]; // Red
-                    data[index + 1] = RGB_Black[1]; // Green
-                    data[index + 2] = RGB_Black[2]; // Blue
-                    data[index + 3] = 255;      // Alpha
-                }
-            }
-        }
         let color;
         switch(worldMap[mapX][mapY]) {
             case 1:  color = RGB_Red;    break;
@@ -160,7 +160,7 @@ function raycaster() {
     canvas_ctx.putImageData(canvas_buffer, 0, 0); //Outside the loop for performance reasons
 }
 
-let keys ={}
+let keys = {};
 document.addEventListener('keydown', (event) =>{
     keys[event.code] = true;
 })
@@ -218,6 +218,6 @@ function gameLoop() {
     raycaster();
     requestAnimationFrame(gameLoop);
 }
-raycaster(); // Starter
+raycaster(); 
 gameLoop();
   
