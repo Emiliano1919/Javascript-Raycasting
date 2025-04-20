@@ -128,6 +128,7 @@ for (let x = 0; x < w; x++) {
         for (let y = 0; y < h; y++) {
             const index = (y * canvas.width + x) * 4;
             if (y >= drawStart && y <= drawEnd) {
+                color = color.map(c => c -perpWallDist/5 ); // If it is very far change the color to something darker
                 data[index + 0] = color[0]; // Red
                 data[index + 1] = color[1]; // Green
                 data[index + 2] = color[2]; // Blue
