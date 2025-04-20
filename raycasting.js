@@ -177,7 +177,8 @@ document.addEventListener('keyup', (event) =>{
 })
 
 function updatePlayer() {
-    const moveSpeed = 0.05;
+    // Hard code speed.
+    const moveSpeed = 0.05; 
     const rotSpeed = 0.03;
 
     // move forward if no wall in front of you
@@ -201,7 +202,7 @@ function updatePlayer() {
     }
 
     // rotate to the right
-    if (keys['KeyD']) {
+    if (keys['KeyD']) { // Use rotation matrices
         const oldDirX = dirX;
         dirX = dirX * Math.cos(-rotSpeed) - dirY * Math.sin(-rotSpeed);
         dirY = oldDirX * Math.sin(-rotSpeed) + dirY * Math.cos(-rotSpeed);
@@ -211,7 +212,7 @@ function updatePlayer() {
     }
 
     // rotate to the left
-    if (keys['KeyA']) {
+    if (keys['KeyA']) { // Use rotation matrices
         const oldDirX = dirX;
         dirX = dirX * Math.cos(rotSpeed) - dirY * Math.sin(rotSpeed);
         dirY = oldDirX * Math.sin(rotSpeed) + dirY * Math.cos(rotSpeed);
