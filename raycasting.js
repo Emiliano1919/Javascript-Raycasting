@@ -9,6 +9,13 @@ const canvas_ctx = canvas.getContext("2d");
 let canvas_buffer = canvas_ctx.getImageData(0, 0, canvas.width, canvas.height);
 let data = canvas_buffer.data;
 
+document.body.style.margin = "0";
+document.body.style.height = "100vh";
+document.body.style.display = "flex";
+document.body.style.justifyContent = "center";
+document.body.style.alignItems = "center";
+document.body.style.background = "#111"; 
+
 // This map is from the main source I used to code this
 const worldMap = [
     [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
