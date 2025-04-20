@@ -1,8 +1,9 @@
 // Necesary code to run on the browser and use the canvas API
 const canvas = document.createElement("canvas");
 document.body.appendChild(canvas);
-canvas.width = 600;
-canvas.height = 600;
+canvas.width = 800;
+canvas.height = 800;
+h = canvas.height;
 w = canvas.width;
 const canvas_ctx = canvas.getContext("2d");
 let canvas_buffer = canvas_ctx.getImageData(0, 0, canvas.width, canvas.height);
@@ -28,7 +29,7 @@ const worldMap = [
     [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
     [1,4,4,4,4,4,4,4,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
     [1,4,0,4,0,0,0,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-    [1,4,0,0,0,0,5,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+    [1,4,0,0,0,0,0,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
     [1,4,0,4,0,0,0,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
     [1,4,0,4,4,4,4,4,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
     [1,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
@@ -65,7 +66,7 @@ for (let x = 0; x < w; x++) {
     // What direction to go next step (-1 or 1)
     let stepX;
     let stepY;
-    let hit; // Value to determine if the coming loop will be ended
+    let hit=0; // Value to determine if the coming loop will be ended
     let side; // Value to determine if we hit a side x or a y side of a wall.
     // Calculate to which side we should step and the inidial sideDistX
     if (rayDirX < 0) {
@@ -103,5 +104,55 @@ for (let x = 0; x < w; x++) {
     } else {
         perpWallDist = (sideDistY - deltaDistY);
     }
+    // Get the height of the line that we should draw (basically we make the height relative to the distance the ray has traveled)
+    let lineHeight = h/perpWallDist;
+    // Calculate the lowest and highest pixel to fill in current stripe (We are basically doing math to centre the line on the screen)
+    let drawStart = - lineHeight/2 + h/2; // This one centers by putting the start below or equal to the middle of the screen
+    if (drawStart < 0) {
+        drawStart = 0;
+    }
+    let drawEnd = lineHeight/2 + h/2; // This one centers by putting the end above or equal to the middle of the screen
+    if (drawEnd >= h) {
+        drawEnd = h-1;
+    }
+    const RGB_Red = [255, 0, 0];
+    const RGB_Green = [0, 255, 0];
+    const RGB_Blue = [0, 0, 255];
+    const RGB_White = [255,255, 255];
+    const RGB_Yellow = [255, 255, 0];
+    const RGB_Black = [0,0,0];
+    function verticalLine(x, drawStart, drawEnd, color) {
+        drawStart = Math.floor(drawStart);
+        drawEnd = Math.floor(drawEnd);
+    
+        for (let y = 0; y < h; y++) {
+            const index = (y * canvas.width + x) * 4;
+            if (y >= drawStart && y <= drawEnd) {
+                data[index + 0] = color[0]; // Red
+                data[index + 1] = color[1]; // Green
+                data[index + 2] = color[2]; // Blue
+                data[index + 3] = 255;      // Alpha
+            } else {
+                data[index + 0] = RGB_Black[0]; // Red
+                data[index + 1] = RGB_Black[1]; // Green
+                data[index + 2] = RGB_Black[2]; // Blue
+                data[index + 3] = 255;      // Alpha
+            }
+        }
+    }
+    let color;
+    switch(worldMap[mapX][mapY]) {
+        case 1:  color = RGB_Red;    break;
+        case 2:  color = RGB_Green;  break;
+        case 3:  color = RGB_Blue;   break;
+        case 4:  color = RGB_White;  break;
+        default: color = RGB_Yellow; break; 
+    }
+    // Give a different color to the sides
+    if (side === 1) {
+        color = color.map(c => c / 2);
+    }
+    verticalLine(x, drawStart, drawEnd, color);
+    canvas_ctx.putImageData(canvas_buffer, 0, 0);
 }
   
